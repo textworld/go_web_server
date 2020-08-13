@@ -12,11 +12,17 @@ func main() {
 
 	logger, _ := zap.NewProduction()
 
+	authMiddleware, err := auth.NewMiddleware("testtt", "/Users/aside/.ssh/zwb_rsa")
+	if err != nil {
+		panic(err)
+	}
+
+
 	router := gin.Default()
 	// Simple group: v1
 	v1 := router.Group("/v1")
 	{
-		v1.POST("/login", auth.Login)
+		v1.POST("/login", authMiddleware.Login)
 	}
 
 	router.GET("/ping", func(c *gin.Context) {
